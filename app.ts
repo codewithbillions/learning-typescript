@@ -134,3 +134,123 @@ let sum1 = (num1: number, num2: number, another?:number) => {
     return num1 + num2
 }
 
+let func = (user: {username:string,age:number,phone?:string}) => {
+    console.log(user.username)
+}
+
+//TYPE ALIASES
+type UserType = {
+    username:string;
+    age:number;
+    phone?:string
+}
+
+let betterFunc = (user:UserType)=> {
+    console.log(user.username)
+}
+
+type myFunc = (a:number, b:string)=> void
+let write : myFunc = (num, str) => {
+    console.log(num + " times" + str)
+}
+
+type UserType2 = {
+    username: string;
+    age: number;
+    phone?: string;
+    theme: "dark" | "light"
+}
+
+const userWithTheme : UserType2 = {
+    username: "john",
+    age: 43,
+    // theme: "pink"
+    theme:"dark"
+}
+
+// INTERFACES
+
+interface IUser {
+    username:string;
+    email:string;
+    age:number
+}
+
+interface IEmployee extends IUser {
+    employeeId: number
+}
+
+const emp : IEmployee = {
+    username: "tom",
+    email: "tom@email.com",
+    age: 40,
+    employeeId: 2,
+}
+
+
+const client: IUser = {
+    username: "tom",
+    email: "tom@email.com",
+    age: 40,
+    // employeeId: 2, we dont need this because it is not part of the interface IUser
+}
+
+// GENERICS
+
+interface IAuthor {
+    id: number,
+    username: string
+}
+
+interface ICategory{
+    categoryId: number,
+    title: string
+}
+interface IPost {
+    id: number;
+    title: string;
+    desc: string;
+    extra: IAuthor[] | ICategory[]
+}
+
+interface IpostBetter<T> {
+    id: number;
+    title: string;
+    desc: string;
+    extra: T[]
+}
+
+const testMe : IpostBetter<string> = {
+    id: 1,
+    title: "post title",
+    desc: "post desc",
+    extra: ["str", "str2"]
+}
+
+interface IPostEvenBetter <T extends object> {
+    id: number;
+    title: string;
+    desc: string;
+    extra: T[]
+}
+
+const testMe2: IPostEvenBetter<{id: number, username: string}> = { // adding a string wont work, it must be an object
+    id: 1,
+    title: "post title",
+    desc: "post desc",
+    extra: [{id:1, username:"john"}],
+}
+
+
+const testMe3: IPostEvenBetter<IAuthor> = { 
+    id: 1,
+    title: "post title",
+    desc: "post desc",
+    extra: [{ id: 1, username: "john" }],// if i try to add a type that is not in IAuthor it wont work
+}
+const testMe4: IPostEvenBetter<ICategory> = { 
+    id: 1,
+    title: "post title",
+    desc: "post desc",
+    extra: [{categoryId:1, title:"cat"}],
+}
